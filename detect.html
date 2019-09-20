@@ -1,0 +1,25 @@
+<html>
+<head>
+<script>
+function iOSversion() {
+  console.log('detecting ios');
+  var ver = 'not iOS';
+  const platform = navigator.platform;
+  console.log('Platform: ', platform);
+  if (/iP(hone|od|ad)/.test(navigator.platform)) {
+    var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+    ver = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+  } else {
+    ver += ' ('+platform+')'
+  }
+  
+  document.getElementById("message").textContent = ver;
+  console.log('detecting ios completed: ', ver);
+}
+</script>
+</head>
+<body onload="iOSversion()">
+<h1>Detect ios13</h1>
+<span id='message'>Not determined</span>
+</body>
+</html>
