@@ -4,22 +4,19 @@
 function iOSversion() {
   console.log('detecting ios');
   var ver = 'not iOS';
+  var iosVer = '?';
   const platform = navigator.platform;
   console.log('Platform: ', platform);
   if (/iP(hone|od|ad)/.test(navigator.platform)) {
     var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
     ver = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
-    if (ver.length > 2 && ver.substr(0,2) == 13) {
-      ver += ' <---- YOU ARE ON IOS 13';
-    }
-    if (ver.length > 2 && ver.substr(0,2) == 12) {
-      ver += ' <---- YOU ARE ON IOS 12';
-    }
+    iosVer = ver[0];
   } else {
     ver += ' ('+platform+')'
   }
   
   document.getElementById("message").textContent = ver;
+    document.getElementById("versionOfIOS").textContent = iosVer;
   console.log('detecting ios completed: ', ver);
 }
 </script>
@@ -27,5 +24,6 @@ function iOSversion() {
 <body onload="iOSversion()">
 <h1>Detect ios13</h1>
 <span id='message'>Not determined</span>
+<span id='versionOfIOS'>Not determined</span>
 </body>
 </html>
