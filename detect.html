@@ -16,14 +16,15 @@ function iOSversion() {
   }
   
   document.getElementById("message").textContent = ver;
-    document.getElementById("versionOfIOS").textContent = iosVer;
+  document.getElementById("versionOfIOS").textContent = iosVer;
   console.log('detecting ios completed: ', ver);
 }
 </script>
 </head>
 <body onload="iOSversion()">
 <h1>Detect ios13</h1>
-<span id='message'>Not determined</span>
-<span id='versionOfIOS'>Not determined</span>
+Your platform is: <span id='message'>Not determined</span>
+<br/>
+You are on IOS version: <span id='versionOfIOS'>Not determined</span>
 </body>
 </html>
