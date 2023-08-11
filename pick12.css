@@ -1,0 +1,46 @@
+/* Style for form labels */
+form label {
+    display: inline-block;
+    width: 200px;
+    vertical-align: middle;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+/* Style for account input and horse inputs */
+form input[type="number"],
+form select {
+    display: inline-block;
+    width: 100px; /* Adjusted width */
+    padding: 5px;
+    vertical-align: middle;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* Style for other form inputs */
+form input[type="text"] {
+    display: inline-block;
+    width: 300px;
+    padding: 5px;
+    vertical-align: middle;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* Style for form button */
+form input[type="button"] {
+    display: block;
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Style for messages */
+#message,
+#errorText {
+    margin-top: 10px;
+}
