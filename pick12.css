@@ -7,19 +7,10 @@ form label {
     font-weight: bold;
 }
 
-/* Style for account input and horse inputs */
+/* Style for form inputs */
 form input[type="number"],
+form input[type="text"],
 form select {
-    display: inline-block;
-    width: 100px; /* Adjusted width */
-    padding: 5px;
-    vertical-align: middle;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-}
-
-/* Style for other form inputs */
-form input[type="text"] {
     display: inline-block;
     width: 300px;
     padding: 5px;
@@ -37,10 +28,20 @@ form input[type="button"] {
     color: white;
     border: none;
     cursor: pointer;
+    float: left; /* Align the button to the left */
 }
 
 /* Style for messages */
 #message,
 #errorText {
     margin-top: 10px;
+}
+
+/* Media query for larger screens */
+@media screen and (min-width: 481px) {
+    /* Adjust styles for larger screens */
+    form input[type="number"],
+    form select {
+        width: 150px;
+    }
 }
