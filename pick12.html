@@ -48,8 +48,10 @@
 
                 if (duplicateSelections.length > 0) {
                     setError("Duplicate selections found: " + duplicateSelections.join(", "));
-                    return; 
+                    return;
                 }
+
+                setMessage("Saving your entry...");
 
                 // POST entry
                 var payload = {
@@ -66,7 +68,7 @@
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
-                            console.log("Form submitted successfully.");
+                            toggleToViewState();
                         } else {
                             // Error handling for non-200 status code
                             console.error("Error submitting form. API response:", xhr.responseText);
@@ -76,16 +78,101 @@
                 };
                 xhr.send(JSON.stringify(payload));
             }
+            function toggleToViewState() {
+                setMessage("Form submitted successfully!");
+                document
+                    .getElementById("headline")
+                    .innerText = "View Your Entry";
+                document
+                    .getElementById("entryForm")
+                    .style
+                    .display = "none";
+                document
+                    .getElementById("viewForm")
+                    .style
+                    .visibility = "visible";
+                document
+                    .getElementById("viewForm")
+                    .style
+                    .display = "inline";
+            }
             // shows user error message
             function setError(errorText) {
+                console.error(errorText);
                 var errorElement = document.getElementById("errorText");
                 errorElement.innerText = errorText;
                 errorElement.style.color = "red";
             }
+            // shows user normal message
+            function setMessage(message) {
+                console.log(message);
+                var errorElement = document.getElementById("message");
+                errorElement.innerText = message;
+                errorElement.style.color = "message";
+            }
+            // shows prior entry if any
+            function viewEntry() {
+                setError("");
+                setMessage("");
+                console.log("View Entry...");
+                var account = document
+                    .getElementById("accountV")
+                    .value;
+                var lastName = document
+                    .getElementById("lastNameV")
+                    .value;
+
+                // validate account, last name
+                if (!account || account < 1000 || account > 999999) {
+                    setError("Please specify Account between 4 and 6 digits");
+                    return;
+                }
+                if (!lastName || lastName.length < 1 || lastName.length > 100) {
+                    setError("Please specify Last Name between 1 & 100 characters");
+                    return;
+                }
+
+                // GET entry
+                //var apiUrl = "https://www.example.com/entries";
+                var apiUrl = "https://uh8jpafh76.execute-api.ap-southeast-2.amazonaws.com/entries";
+                var queryParams = "?accountNumber=" + encodeURIComponent(account) + "&lastName=" + encodeURIComponent(lastName);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", apiUrl + queryParams, true);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            // Successful GET handling (you can process the API response here)
+                            var responseData = JSON.parse(xhr.responseText);
+                            console.log("API response:", responseData);
+                            setMessage(JSON.stringify(responseData));
+                        } else {
+                            // Error handling for non-200 status code
+                            setError("Error fetching entries. API response:", xhr.responseText);
+                        }
+                    }
+                };
+
+                xhr.send();
+
+            }
         </script>
     </head>
     <body>
-        <form>
+        <h1 id="headline">Enter Pick 12</h1>
+        <form id="viewForm" style="display: none; visibility: hidden;">
+            <label for="accountV">Account:</label>
+            <input type="number" id="accountV" name="accountV" min="1000" max="999999" required><br>
+
+            <label for="firstNameV">First Name:</label>
+            <input type="text" id="firstNameV" name="firstNameV" minlength="3" maxlength="100" required><br>
+
+            <label for="lastNameV">Last Name:</label>
+            <input type="text" id="lastNameV" name="lastNameV" minlength="3" maxlength="100" required><br>
+            <input type="button" value="View My Entry" onclick="viewEntry()">
+        </form>
+        <form id="entryForm">
             <label for="account">Account:</label>
             <input type="number" id="account" name="account" min="1000" max="999999" required><br>
 
@@ -97,7 +184,7 @@
 
             <label for="horse1">Horse 1:</label>
             <select id="horse1" name="horse1">
-                <option value="1">1</option>
+                <option value="1" selected>1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
@@ -114,7 +201,7 @@
             <label for="horse2">Horse 2:</label>
             <select id="horse2" name="horse2">
                 <option value="1">1</option>
-                <option value="2">2</option>
+                <option value="2" selected>2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
@@ -132,7 +219,7 @@
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
-                <option value="4">4</option>
+                <option value="4" selected>4</option>
                 <option value="5">5</option>
                 <option value="6">6</option>
                 <option value="7">7</option>
@@ -147,7 +234,7 @@
             <select id="horse4" name="horse4">
                 <option value="1">1</option>
                 <option value="2">2</option>
-                <option value="3">3</option>
+                <option value="3" selected>3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
                 <option value="6">6</option>
@@ -165,7 +252,7 @@
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
-                <option value="5">5</option>
+                <option value="5" selected>5</option>
                 <option value="6">6</option>
                 <option value="7">7</option>
                 <option value="8">8</option>
@@ -182,7 +269,7 @@
                 <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
-                <option value="6">6</option>
+                <option value="6" selected>6</option>
                 <option value="7">7</option>
                 <option value="8">8</option>
                 <option value="9">9</option>
@@ -199,7 +286,7 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
                 <option value="6">6</option>
-                <option value="7">7</option>
+                <option value="7" selected>7</option>
                 <option value="8">8</option>
                 <option value="9">9</option>
                 <option value="10">10</option>
@@ -216,7 +303,7 @@
                 <option value="5">5</option>
                 <option value="6">6</option>
                 <option value="7">7</option>
-                <option value="8">8</option>
+                <option value="8" selected>8</option>
                 <option value="9">9</option>
                 <option value="10">10</option>
                 <option value="11">11</option>
@@ -233,7 +320,7 @@
                 <option value="6">6</option>
                 <option value="7">7</option>
                 <option value="8">8</option>
-                <option value="9">9</option>
+                <option value="9" selected>9</option>
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
@@ -250,7 +337,7 @@
                 <option value="7">7</option>
                 <option value="8">8</option>
                 <option value="9">9</option>
-                <option value="10">10</option>
+                <option value="10" selected>10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
             </select><br>
@@ -267,7 +354,7 @@
                 <option value="8">8</option>
                 <option value="9">9</option>
                 <option value="10">10</option>
-                <option value="11">11</option>
+                <option value="11" selected>11</option>
                 <option value="12">12</option>
             </select><br>
 
@@ -284,11 +371,12 @@
                 <option value="9">9</option>
                 <option value="10">10</option>
                 <option value="11">11</option>
-                <option value="12">12</option>
+                <option value="12" selected>12</option>
             </select><br>
 
-            <p id="errorText"></p>
             <input type="button" value="Submit" onclick="submitForm()">
         </form>
+        <p id="message"></p>
+        <p id="errorText"></p>
     </body>
 </html>
