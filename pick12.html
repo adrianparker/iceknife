@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Horse Form</title>
+        <title>Pick 12!</title>
         <script>
-            function submitForm() {
+            const endpoint = "https://uh8jpafh76.execute-api.ap-southeast-2.amazonaws.com/entries";
+
+            // POSTs an entry for the user
+            function submitEntryForm() {
+                
+                setMessage("");
                 setError("");
-                var account = document
-                    .getElementById("account")
-                    .value;
-                var firstName = document
-                    .getElementById("firstName")
-                    .value;
-                var lastName = document
-                    .getElementById("lastName")
-                    .value;
+
+                var account = document.getElementById("account").value;
+                var firstName = document.getElementById("firstName").value;
+                var lastName = document.getElementById("lastName").value;
 
                 // validate account, first name, last name
                 if (!account || account < 1000 || account > 999999) {
@@ -27,6 +27,7 @@
                 if (!lastName || lastName.length < 1 || lastName.length > 100) {
                     setError("Please specify Last Name between 1 & 100 characters");
                     return;
+
                 }
                 // validate selections
                 var runners = [];
@@ -36,13 +37,11 @@
                 for (var i = 1; i <= 12; i++) {
                     var selection = "Horse " + i;
                     var position = parseInt(document.getElementById("horse" + i).value);
-
                     if (selectedPositions.includes(position)) {
                         duplicateSelections.push(selection);
                     } else {
                         selectedPositions.push(position);
                     }
-
                     runners.push({"selection": selection, "position": position});
                 }
 
@@ -52,75 +51,59 @@
                 }
 
                 setMessage("Saving your entry...");
-
-                // POST entry
                 var payload = {
                     "accountNumber": parseInt(account),
                     "firstName": firstName,
                     "lastName": lastName,
                     "runners": runners
                 };
-
                 var xhr = new XMLHttpRequest();
-                //xhr.open("POST", "https://www.example.com/entries", true);
-                xhr.open("POST", "https://uh8jpafh76.execute-api.ap-southeast-2.amazonaws.com/entries", true);
+                xhr.open("POST", endpoint, true);
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
                             toggleToViewState();
                         } else {
-                            // Error handling for non-200 status code
-                            console.error("Error submitting form. API response:", xhr.responseText);
                             setError(xhr.responseText);
                         }
                     }
                 };
                 xhr.send(JSON.stringify(payload));
             }
+
             function toggleToViewState() {
                 setMessage("Form submitted successfully!");
-                document
-                    .getElementById("headline")
-                    .innerText = "View Your Entry";
-                document
-                    .getElementById("entryForm")
-                    .style
-                    .display = "none";
-                document
-                    .getElementById("viewForm")
-                    .style
-                    .visibility = "visible";
-                document
-                    .getElementById("viewForm")
-                    .style
-                    .display = "inline";
+                document.getElementById("headline").innerText = "View Your Entry";
+                document.getElementById("entryForm").style.display = "none";
+                document.getElementById("viewForm").style.visibility = "visible";
+                document.getElementById("viewForm").style.display = "inline";
             }
-            // shows user error message
+
+            // shows user error information
             function setError(errorText) {
-                console.error(errorText);
-                var errorElement = document.getElementById("errorText");
-                errorElement.innerText = errorText;
-                errorElement.style.color = "red";
+                setText("errorText", errorText);
             }
-            // shows user normal message
+
+            // shows user normal information
             function setMessage(message) {
+                setText("message", message);
+            }   
+
+            // set user informational text
+            function setText(elementId, message){
                 console.log(message);
-                var errorElement = document.getElementById("message");
-                errorElement.innerText = message;
-                errorElement.style.color = "message";
+                var element = document.getElementById(elementId);
+                element.innerText = message;
             }
-            // shows prior entry if any
+
+            // loads and displays prior entry, if any
             function viewEntry() {
                 setError("");
                 setMessage("");
-                console.log("View Entry...");
-                var account = document
-                    .getElementById("accountV")
-                    .value;
-                var lastName = document
-                    .getElementById("lastNameV")
-                    .value;
+
+                var account = document.getElementById("accountV").value;
+                var lastName = document.getElementById("lastNameV").value;
 
                 // validate account, last name
                 if (!account || account < 1000 || account > 999999) {
@@ -132,35 +115,26 @@
                     return;
                 }
 
-                // GET entry
-                //var apiUrl = "https://www.example.com/entries";
-                var apiUrl = "https://uh8jpafh76.execute-api.ap-southeast-2.amazonaws.com/entries";
-                var queryParams = "?accountNumber=" + encodeURIComponent(account) + "&lastName=" + encodeURIComponent(lastName);
-
+                var queryParams = "?accountNumber=" + encodeURIComponent(account);
+                queryParams += "&lastName=" + encodeURIComponent(lastName);
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", apiUrl + queryParams, true);
-
+                xhr.open("GET", endpoint + queryParams, true);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
-                            // Successful GET handling (you can process the API response here)
-                            var responseData = JSON.parse(xhr.responseText);
-                            console.log("API response:", responseData);
-                            setMessage(JSON.stringify(responseData));
+                            setMessage(JSON.stringify(JSON.parse(xhr.responseText)));
                         } else {
-                            // Error handling for non-200 status code
-                            setError("Error fetching entries. API response:", xhr.responseText);
+                            setError("Error fetching entry. API response:", xhr.responseText);
                         }
                     }
                 };
-
                 xhr.send();
 
             }
         </script>
     </head>
     <body>
-        <h1 id="headline">Enter Pick 12</h1>
+        <h1 id="headline">Pick Your 12 Runners In Finishing Order!</h1>
         <form id="viewForm" style="display: none; visibility: hidden;">
             <label for="accountV">Account:</label>
             <input type="number" id="accountV" name="accountV" min="1000" max="999999" required><br>
@@ -172,6 +146,7 @@
             <input type="text" id="lastNameV" name="lastNameV" minlength="3" maxlength="100" required><br>
             <input type="button" value="View My Entry" onclick="viewEntry()">
         </form>
+
         <form id="entryForm">
             <label for="account">Account:</label>
             <input type="number" id="account" name="account" min="1000" max="999999" required><br>
@@ -374,9 +349,10 @@
                 <option value="12" selected>12</option>
             </select><br>
 
-            <input type="button" value="Submit" onclick="submitForm()">
+            <input type="button" value="Enter Your Choices!" onclick="submitEntryForm()">
         </form>
-        <p id="message"></p>
-        <p id="errorText"></p>
+
+        <p id="message" style="color: green;"></p>
+        <p id="errorText" style="color: red;"></p>
     </body>
 </html>
