@@ -45,3 +45,23 @@ form input[type="button"] {
         width: 150px;
     }
 }
+
+/* Media query for mobile devices */
+@media screen and (max-width: 480px) {
+    /* Adjust styles for mobile devices */
+    form label {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    form input[type="number"],
+    form input[type="text"],
+    form select {
+        width: 100%;
+    }
+    
+    form input[type="button"] {
+        width: 100%;
+        float: none;
+    }
+}
