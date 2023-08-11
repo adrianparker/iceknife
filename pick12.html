@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Horse Form</title>
+        <script>
+            function submitForm() {
+                setError("");
+                var account = document
+                    .getElementById("account")
+                    .value;
+                var firstName = document
+                    .getElementById("firstName")
+                    .value;
+                var lastName = document
+                    .getElementById("lastName")
+                    .value;
+
+                // validate account, first name, last name
+                if (!account || account < 1000 || account > 999999) {
+                    setError("Please specify Account between 4 and 6 digits");
+                    return;
+                }
+                if (!firstName || firstName.length < 1 || firstName.length > 100) {
+                    setError("Please specify First Name between 1 & 100 characters");
+                    return;
+                }
+                if (!lastName || lastName.length < 1 || lastName.length > 100) {
+                    setError("Please specify Last Name between 1 & 100 characters");
+                    return;
+                }
+                // validate selections
+                var runners = [];
+                var selectedPositions = [];
+                var duplicateSelections = [];
+
+                for (var i = 1; i <= 12; i++) {
+                    var selection = "Horse " + i;
+                    var position = parseInt(document.getElementById("horse" + i).value);
+
+                    if (selectedPositions.includes(position)) {
+                        duplicateSelections.push(selection);
+                    } else {
+                        selectedPositions.push(position);
+                    }
+
+                    runners.push({"selection": selection, "position": position});
+                }
+
+                if (duplicateSelections.length > 0) {
+                    setError("Duplicate selections found: " + duplicateSelections.join(", "));
+                    return; 
+                }
+
+                // POST entry
+                var payload = {
+                    "accountNumber": parseInt(account),
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "runners": runners
+                };
+
+                var xhr = new XMLHttpRequest();
+                //xhr.open("POST", "https://www.example.com/entries", true);
+                xhr.open("POST", "https://uh8jpafh76.execute-api.ap-southeast-2.amazonaws.com/entries", true);
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            console.log("Form submitted successfully.");
+                        } else {
+                            // Error handling for non-200 status code
+                            console.error("Error submitting form. API response:", xhr.responseText);
+                            setError(xhr.responseText);
+                        }
+                    }
+                };
+                xhr.send(JSON.stringify(payload));
+            }
+            // shows user error message
+            function setError(errorText) {
+                var errorElement = document.getElementById("errorText");
+                errorElement.innerText = errorText;
+                errorElement.style.color = "red";
+            }
+        </script>
+    </head>
+    <body>
+        <form>
+            <label for="account">Account:</label>
+            <input type="number" id="account" name="account" min="1000" max="999999" required><br>
+
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" minlength="3" maxlength="100" required><br>
+
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" minlength="3" maxlength="100" required><br>
+
+            <label for="horse1">Horse 1:</label>
+            <select id="horse1" name="horse1">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse2">Horse 2:</label>
+            <select id="horse2" name="horse2">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse3">Horse 3:</label>
+            <select id="horse3" name="horse3">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse4">Horse 4:</label>
+            <select id="horse4" name="horse4">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse5">Horse 5:</label>
+            <select id="horse5" name="horse5">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse6">Horse 6:</label>
+            <select id="horse6" name="horse6">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse7">Horse 7:</label>
+            <select id="horse7" name="horse7">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse8">Horse 8:</label>
+            <select id="horse8" name="horse8">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse9">Horse 9:</label>
+            <select id="horse9" name="horse9">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse10">Horse 10:</label>
+            <select id="horse10" name="horse10">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse11">Horse 11:</label>
+            <select id="horse11" name="horse11">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <label for="horse12">Horse 12:</label>
+            <select id="horse12" name="horse12">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+
+            <p id="errorText"></p>
+            <input type="button" value="Submit" onclick="submitForm()">
+        </form>
+    </body>
+</html>
