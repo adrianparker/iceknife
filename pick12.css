@@ -63,6 +63,5 @@ form input[type="button"] {
     form input[type="button"] {
         width: 100%;
         float: none;
-        background-color: red;
     }
 }
