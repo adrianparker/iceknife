@@ -37,6 +37,27 @@ form input[type="button"] {
     margin-top: 10px;
 }
 
+/* Style for the table */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+/* Style for table header */
+th {
+    background-color: lightblue;
+    text-align: left;
+    padding: 8px;
+}
+
+/* Style for table cells */
+td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
 /* Media query for larger screens */
 @media screen and (min-width: 481px) {
     /* Adjust styles for larger screens */
